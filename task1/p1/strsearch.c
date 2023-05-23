@@ -17,31 +17,39 @@ int search_string(char str[], char pat[])
     int i, j, k;
 
     /* 文字列の大文字を小文字に変換 */
-    for (i = 0; i < strlen(str); i++)
+    i = 0;
+    while (str[i] != '\0')
     {
         str[i] = tolower(str[i]);
+        i++;
     }
-    for (i = 0; i < strlen(pat); i++)
+    i = 0;
+    while (pat[i] != '\0')
     {
         pat[i] = tolower(pat[i]);
+        i++;
     }
 
     /* 文字列検索 */
-    for (i = 0; i < strlen(str); i++)
+    i = 0;
+    while (str[i] != '\0')
     {
         /* 文字列の先頭から順に文字列を比較 */
-        for (j = 0; j < strlen(pat); j++)
+        j = 0;
+        while (pat[j] != '\0')
         {
             if (str[i + j] != pat[j])
             {
                 break;
             }
+            j++;
         }
         /* 一致した文字数とpatの文字数が一致したら文字列が含まれているので、その位置を返す */
-        if (j == strlen(pat))
+        if (pat[j] == '\0')
         {
             return i;
         }
+        i++;
     }
     return -1;
 }
@@ -49,6 +57,7 @@ int search_string(char str[], char pat[])
 int main(void)
 {
     int pos;             /* 文字列検索の現在位置 */
+    int i;               /* ループカウンタ */
     char str[MAXSTRLEN]; /* 文字列入力用(被検索文字列) */
     char pat[MAXSTRLEN]; /* 文字列入力用(検索文字列) */
 
@@ -64,8 +73,13 @@ int main(void)
 
     /* 文字列検索 */
     pos = 0;
-    int count = 0;
-    while (pos < strlen(str))
+    int count = 0; // 見つかった回数を記録 [オプション課題]
+    i = 0;
+    while (str[i] != '\0')
+    {
+        i++;
+    }
+    while (pos < i)
     {
         int ret;
         ret = search_string(&str[pos], pat);
@@ -81,7 +95,7 @@ int main(void)
 
         pos += ret + 1; /* 検索位置を進める */
     }
-    /* 見つかった回数を出力 */
+    /* 見つかった回数を出力 [オプション課題] */
     printf("\nfound %d time(s)\n", count);
 
     return 0;
