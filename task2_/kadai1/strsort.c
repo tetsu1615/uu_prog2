@@ -8,11 +8,11 @@
 /*
 	int ReadLines(char *lines[], int numMax)
 
-		標準入力からの入力を，一行ずつ動的に確保したメモリに格納し，
+	標準入力からの入力を，一行ずつ動的に確保したメモリに格納し，
 	そのアドレスを文字列へのポインタ配列に保存する．
 	EOF(Ctrl+Z) で入力を終了する．
 
-		lines   : 文字列へのポインタの配列
+	lines   : 文字列へのポインタの配列
 	numMax  : 最大の読み込み行数
 
 		戻り値  : 読み込んだ行数
@@ -59,10 +59,10 @@ void PrintLines(char *lines[], int num)
 
 	ポインタの配列を，辞書順にソート
 
-		lines   : 文字列へのポインタの配列
+	lines   : 文字列へのポインタの配列
 	num     : 行数（配列内の有効な値の数）
 
-		戻り値  : なし
+	戻り値  : なし
 */
 void Sort(char *lines[], int num)
 {

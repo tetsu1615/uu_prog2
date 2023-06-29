@@ -131,10 +131,10 @@ void ListDestroy(PCELL header)
 {
 	// ここを実装
 	PCELL pDesCell;
-	while (pDesCell->next != NULL)
+	while (header)
 	{
-		pDesCell = header->next;
-		header->next = header->next->next;
+		pDesCell = header;
+		header = header->next;
 		free(pDesCell);
 	}
 }

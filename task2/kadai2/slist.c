@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-// #include <crtdbg.h>
+#include <crtdbg.h>
 
 /********************* リスト処理部 *********************/
 
@@ -117,7 +117,7 @@ void ListDelete(PCELL pos)
 	// pos の次のセルを削除する
 	PCELL pDelCell;
 	pDelCell = pos->next;
-	pos->next = pos->next->next;
+	pos->next = pDelCell->next;
 	free(pDelCell);
 }
 
@@ -134,7 +134,7 @@ void ListDestroy(PCELL header)
 	while (pDesCell->next != NULL)
 	{
 		pDesCell = header->next;
-		header->next = header->next->next;
+		header->next = pDesCell->next;
 		free(pDesCell);
 	}
 }
@@ -142,79 +142,109 @@ void ListDestroy(PCELL header)
 
 #define BUFSIZE 20
 
+//int main()
+//{
+//	static char buf[BUFSIZE];
+//	PCELL header;
+//
+//	header = ListCreate();
+//
+//	for (;;)
+//	{
+//		printf(">>");
+//		gets(buf);
+//		switch (*buf)
+//		{
+//		/* リストの先頭に挿入 */
+//		case 'A':
+//		case 'a':
+//			printf("先頭に挿入する文字列を入力：");
+//			gets(buf);
+//			ListInsert(header, buf);
+//			break;
+//		/* 挿入 */
+//		case 'I':
+//		case 'i':
+//		{
+//			PCELL pos;
+//			printf("挿入位置の文字列を入力:");
+//			gets(buf);
+//			pos = ListGetPrevPos(header, buf);
+//			if (pos == NULL)
+//			{
+//				printf("\"%s\"は見つかりません\n", buf);
+//			}
+//			else
+//			{
+//				printf("挿入する文字列を入力:");
+//				gets(buf);
+//				ListInsert(ListNext(pos), buf);
+//			}
+//		}
+//		break;
+//		/* 削除 */
+//		case 'D':
+//		case 'd':
+//		{
+//			PCELL pos;
+//			printf("削除する文字列を入力:");
+//			gets(buf);
+//			pos = ListGetPrevPos(header, buf);
+//			if (pos == NULL)
+//			{
+//				printf("\"%s\"は見つかりません\n", buf);
+//			}
+//			else
+//			{
+//				ListDelete(pos);
+//			}
+//		}
+//		break;
+//		/* 全要素の表示 */
+//		case 'P':
+//		case 'p':
+//			ListPrintAll(header);
+//			break;
+//		/* プログラムの終了 */
+//		case 'E':
+//		case 'e':
+//			ListDestroy(header);
+//			exit(0);
+//			break;
+//		default:
+//			/* ヘルプメッセージの表示 */
+//			printf("(A)dd, (I)nsert, (D)elete, (P)rint, (E)xit\n");
+//		}
+//	}
+//	return 0;
+//}
+
+// テスト用メイン関数
 int main()
 {
-	static char buf[BUFSIZE];
 	PCELL header;
 
-	header = ListCreate();
+	header = ListCreate(); // リストの構築
 
-	for (;;)
-	{
-		printf(">>");
-		gets(buf);
-		switch (*buf)
-		{
-		/* リストの先頭に挿入 */
-		case 'A':
-		case 'a':
-			printf("先頭に挿入する文字列を入力：");
-			gets(buf);
-			ListInsert(header, buf);
-			break;
-		/* 挿入 */
-		case 'I':
-		case 'i':
-		{
-			PCELL pos;
-			printf("挿入位置の文字列を入力:");
-			gets(buf);
-			pos = ListGetPrevPos(header, buf);
-			if (pos == NULL)
-			{
-				printf("\"%s\"は見つかりません\n", buf);
-			}
-			else
-			{
-				printf("挿入する文字列を入力:");
-				gets(buf);
-				ListInsert(ListNext(pos), buf);
-			}
-		}
-		break;
-		/* 削除 */
-		case 'D':
-		case 'd':
-		{
-			PCELL pos;
-			printf("削除する文字列を入力:");
-			gets(buf);
-			pos = ListGetPrevPos(header, buf);
-			if (pos == NULL)
-			{
-				printf("\"%s\"は見つかりません\n", buf);
-			}
-			else
-			{
-				ListDelete(pos);
-			}
-		}
-		break;
-		/* 全要素の表示 */
-		case 'P':
-		case 'p':
-			ListPrintAll(header);
-			break;
-		/* プログラムの終了 */
-		case 'E':
-		case 'e':
-			ListDestroy(header);
-			exit(0);
-			break;
-		default:
-			/* ヘルプメッセージの表示 */
-			printf("(A)dd, (I)nsert, (D)elete, (P)rint, (E)xit\n");
-		}
-	}
-	return 0;
+	ListInsert(header, "panda"); // 要素の先頭への挿入
+	ListInsert(header, "hippo");
+	ListInsert(header, "shark");
+	ListInsert(header, "koala");
+	ListInsert(header, "giraff");
+	ListInsert(header, "crane");
+
+	ListPrintAll(header); // 表示
+
+	// 挿入のテスト
+	ListInsert(ListNext(ListGetPrevPos(header, "shark")), "walrus");
+
+	// 削除のテスト
+	ListDelete(ListGetPrevPos(header, "shark"));
+	ListDelete(header);
+
+	ListPrintAll(header); // 表示
+
+	ListDestroy(header);
+	// メモリリーク情報の表示
+	_CrtDumpMemoryLeaks();
 }

@@ -11,7 +11,7 @@
 /* リストセル　構造体定義 */
 typedef struct cell
 {
-	char string[8];
+	char *string;
 	struct cell *next;
 } CELL, *PCELL;
 
@@ -98,6 +98,7 @@ PCELL ListInsert(PCELL pos, const char *string)
 		// ここを実装する
 		// 新しいセルへの文字列をコピーおよび
 		// ポインタの付け替えを行う
+		pNewCell->string = (char *)calloc(strlen(string) + 1, sizeof(char));
 		strcpy(pNewCell->string, string);
 		pNewCell->next = pos->next;
 		pos->next = pNewCell;
@@ -118,6 +119,7 @@ void ListDelete(PCELL pos)
 	PCELL pDelCell;
 	pDelCell = pos->next;
 	pos->next = pos->next->next;
+	free(pDelCell->string);
 	free(pDelCell);
 }
 
@@ -131,10 +133,10 @@ void ListDestroy(PCELL header)
 {
 	// ここを実装
 	PCELL pDesCell;
-	while (pDesCell->next != NULL)
+	while (header)
 	{
-		pDesCell = header->next;
-		header->next = header->next->next;
+		pDesCell = header;
+		header = header->next;
 		free(pDesCell);
 	}
 }
